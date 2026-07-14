@@ -1,17 +1,28 @@
 #!/usr/bin/python3
-"""List all states from the databse."""
+"""Lists all State objects."""
 
-
-import MySQLdb
 from sys import argv
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from model_state import Base, State
 
 if __name__ == "__main__":
-    db = MySQLdb.connect(host="localhost", port=3306, user=argv[1],
-                         passwd=argv[2], db=argv[3], charset="utf8")
-    cursor = db.cursor()
-    cursor.execute("SELECT * FROM states ORDER BY id ASC")
-    mylist = cursor.fetchall()
-    for i in mylist:
-        print(i)
-    cursor.close()
-    db.close()
+    engine = create_engine(
+        f"mysql+mysqldb://{argv[1]}:{argv[2]}@localhost:3306/{argv[3]}",
+        pool_pre_ping=True
+    )
+
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    for state in session.query(State).order_by(State.id):
+        print(f"{state.id}: {state.name}")
+
+    session.close()~                                                                                
+~                                                                                
+~                                                                                
+~                                                                                
+~                                                                                
+~                                                                                
+~                                                                                
+~               
